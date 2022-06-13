@@ -1,6 +1,7 @@
 const express = require("express")
 const app = express()
 const PORT = 8080
+app.set("view engine", "ejs");
 
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
@@ -20,10 +21,6 @@ app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
 
-app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}`)
-})
-
 app.get("/set", (req, res) => {
   const a = 1;
   res.send(`a = ${a}`);
@@ -32,3 +29,7 @@ app.get("/set", (req, res) => {
 //  app.get("/fetch", (req, res) => {
 //   res.send(`a = ${a}`);
 //  });
+
+app.listen(PORT, () => {
+  console.log(`Example app listening on port ${PORT}`)
+})
