@@ -18,14 +18,15 @@ app.post("/urls", (req, res) => {
   res.redirect(`/urls/${shortURL}`)
 });
 
-
-app.get("/", (req, res) => {
-  res.send("helloooooo")
-})
-
-app.get("/urls.json", (req, res) => {
-  res.json(urlDatabase);
+app.post("/urls/:shortURL/delete", (req, res) => {
+  // let shortURL = req.params.shortURL
+  delete urlDatabase[req.params.shortURL]
+  res.redirect("/urls")
 });
+
+// app.get("/", (req, res) => {
+//   res.send("helloooooo")
+// })
 
 app.get("/urls", (req, res) => {
   const templateVars = { urls: urlDatabase };
