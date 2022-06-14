@@ -19,14 +19,14 @@ app.post("/urls", (req, res) => {
 });
 
 app.post("/urls/:shortURL/delete", (req, res) => {
-  // let shortURL = req.params.shortURL
   delete urlDatabase[req.params.shortURL]
   res.redirect("/urls")
 });
 
-// app.get("/", (req, res) => {
-//   res.send("helloooooo")
-// })
+app.post("/urls/:shortURL/submit", (req, res) => {
+  urlDatabase[req.params.shortURL] = req.body.longURL
+  res.redirect("/urls")
+});
 
 app.get("/urls", (req, res) => {
   const templateVars = { urls: urlDatabase };
@@ -37,14 +37,20 @@ app.get("/urls/new", (req, res) => {
   res.render("urls_new");
 });
 
-app.get("/urls/:shortURL", (req, res) => {
+app.get("/u/:shortURL", (req, res) => {
   const longURL = urlDatabase[req.params.shortURL]
   res.redirect(longURL);
 });
-// app.get("/urls/:shortURL", (req, res) => {
-//   const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL]};
-//   res.render("urls_show", templateVars);
-// });
+
+app.get("/urls/:shortURL", (req, res) => {
+  const templateVars = { 
+    shortURL: req.params.shortURL, 
+    longURL: urlDatabase[req.params.shortURL]
+  };
+  res.render("urls_show", templateVars);
+});
+
+
 
 
 // app.get("/hello", (req, res) => {
