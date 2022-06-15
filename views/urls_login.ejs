@@ -14,12 +14,12 @@
   <main style="margin: 1em;">
     <h1><strong>Login</strong></h1>
     <div>
-      <form method="GET" action="/urls">
+      <form method="POST" action="/login">
         <p>Email Address</p>
-        <input type="email" name="email" id="email">
+        <input type="email" name="email" id="email" placeholder="Enter email">
         <br><br>
         <p>Password</p>
-        <input type="password" name="password" id="password">
+        <input type="password" name="password" id="password" placeholder="Password">
         <br><br> 
         <button type="submit" class="btn btn-primary">Login</button>
       </form>

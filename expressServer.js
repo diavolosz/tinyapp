@@ -53,8 +53,15 @@ app.post("/urls/:shortURL/submit", (req, res) => {
 
 
 app.post("/login", (req, res) => {
-  res.cookie('user_id', req.cookies["user_id"])
-  res.redirect("/urls")
+  const email = req.body.email
+  const password = req.body.password
+  for (let index in users) {
+    if (email === users[index].email && password === users[index].password) {
+      res.cookie('user_id', index)
+      return res.redirect("/urls")
+    }
+  }
+  res.send("<html><body>ERROR 403</body></html>");
 });
 
 
@@ -85,6 +92,7 @@ app.post("/register", (req, res) => {
     email: email
   }
   res.cookie('user_id', randomId)
+  console.log(users)
   res.redirect("/urls")
 })
 
@@ -127,7 +135,6 @@ app.get("/login", (req, res) => {
   const templateVars = {
     // user: users[req.cookies.user_id]
     user: users[req.cookies.user_id]
-
   }
   res.render("urls_login", templateVars)
 })
