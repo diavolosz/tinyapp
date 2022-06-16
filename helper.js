@@ -1,5 +1,7 @@
 
-function generateRandomString() {
+
+// generateRandomString will allow user to generate 6 digit radomized number of short URL for each long URL submitted
+const generateRandomString = () => {
   let array = [];
   for(let x = 0; x < 6; x++) {
     array.push(Math.floor(Math.random() * 9).toString())
@@ -7,6 +9,7 @@ function generateRandomString() {
   return array.join("")
 }
 
+// URLFinder will allow user to scan through the list of submitted and stored URL. Stored URLs are user specific 
 const URLFinder = function(urlDatabase, userID) {
   const usersURL = {};
   for (const index of Object.keys(urlDatabase)) {
@@ -17,11 +20,13 @@ const URLFinder = function(urlDatabase, userID) {
   return usersURL;
 };
 
-
-let dateMaker = () => {
+// dateMaker will allow user to generate the date of file creation 
+const dateMaker = () => {
   let output = Date().split(" ").splice(0, 4).join(" ")
   return output
 }
+
+
 
 
 module.exports = { generateRandomString, URLFinder, dateMaker }; 
