@@ -234,6 +234,8 @@ app.get("/u/:shortURL", (req, res) => {
 
 
 app.get("/urls/:shortURL", (req, res) => {
+  usersURLS = URLFinder(urlDatabase, req.session.user_id);
+  console.log(usersURLS)
   if (!req.session.user_id) {
     templateVars = {
       user: users[req.session.user_id],
@@ -244,6 +246,12 @@ app.get("/urls/:shortURL", (req, res) => {
     templateVars = {
       user: users[req.session.user_id],
       message: "ERROR 403 no authorize view"
+    }
+    return res.render("urls_error", templateVars)
+  } else if (req.session.user_id && usersURLS[req.params.shortURL] === undefined) {
+    templateVars = {
+      user: users[req.session.user_id],
+      message: "ERROR 400 no url"
     }
     return res.render("urls_error", templateVars)
   } else if (!urlDatabase[req.params.shortURL]) {

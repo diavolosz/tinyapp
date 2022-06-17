@@ -1,5 +1,3 @@
-
-
 // generateRandomString will allow user to generate 6 digit radomized number of short URL for each long URL submitted
 const generateRandomString = () => {
   let array = [];
@@ -22,7 +20,7 @@ const URLFinder = function(urlDatabase, userID) {
 
 // dateMaker will allow user to generate the date of file creation 
 const dateMaker = () => {
-  let output = Date().split(" ").splice(0, 4).join(" ")
+  let output = new Date().toLocaleDateString()
   return output
 }
 
