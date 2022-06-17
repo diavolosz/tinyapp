@@ -1,8 +1,8 @@
 const bodyParser = require("body-parser");
 const express = require("express")
-const bcrypt = require('bcryptjs');
-const cookieSession = require('cookie-session');
-const { generateRandomString, URLFinder, dateMaker } = require('./helper');
+const bcrypt = require("bcryptjs");
+const cookieSession = require("cookie-session");
+const { generateRandomString, URLFinder, dateMaker } = require("./helper");
 
 
 const app = express()
@@ -10,11 +10,11 @@ const PORT = 8080
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieSession({
-  name: 'session',
-  keys: ['key1', 'key2']
+  name: "session",
+  keys: ["key1", "key2"]
 }));
 
-//--------------------------------------------------------------
+//-----------------------DATABASE---------------------------------------
 
 
 const urlDatabase = {};
@@ -22,7 +22,7 @@ const users = {};
 let usersURLS = {};
 
 
-//------------------------------------------------------------
+//----------------------POST ROUTES--------------------------------------
 
 
 
@@ -112,8 +112,8 @@ app.post("/login", (req, res) => {
 
 
 app.post("/logout", (req, res) => {
-  res.clearCookie('session');
-  res.clearCookie('session.sig');
+  res.clearCookie("session");
+  res.clearCookie("session.sig");
   res.redirect("/login")
 });
 
@@ -123,7 +123,7 @@ app.post("/register", (req, res) => {
   const { email, password } = req.body
   let randomId = generateRandomString()
 
-  if (req.body.email === '' || req.body.password === '') {
+  if (req.body.email === "" || req.body.password === "") {
     templateVars = {
       user: users[req.session.user_id],
       message: "ERROR 400 empty entry"
@@ -151,15 +151,15 @@ app.post("/register", (req, res) => {
 
 
 
-//----------------------------------------------------------
+//---------------------------GET ROUTES-------------------------------
 
 
 
 app.get("/", (req, res) => {
   if (req.session.user_id) {
-    res.redirect('/urls');
+    res.redirect("/urls");
   } else {
-    res.redirect('/login');
+    res.redirect("/login");
   }
 });
 
@@ -195,7 +195,7 @@ app.get("/urls/new", (req, res) => {
 
 app.get("/register", (req, res) => {
   if (req.session.user_id) {
-    res.redirect('/urls');
+    res.redirect("/urls");
   } else {
     const templateVars = {
       user: users[req.session.user_id]
@@ -208,7 +208,7 @@ app.get("/register", (req, res) => {
 
 app.get("/login", (req, res) => {
   if (req.session.user_id) {
-    return res.redirect('/urls');
+    return res.redirect("/urls");
   } else {
     const templateVars = {
       user: users[req.session.user_id]
