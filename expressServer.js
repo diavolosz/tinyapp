@@ -37,7 +37,11 @@ app.post("/urls", (req, res) => {
     }
     return res.redirect(`/urls`)
   } else {
-    return res.send("<html><body>ERROR 403</body></html>");
+    templateVars = {
+      user: users[req.session.user_id],
+      message: "ERROR 403 user invalid"
+    }
+    return res.render("urls_error", templateVars)
   }
 });
 
@@ -48,7 +52,11 @@ app.post("/urls/:shortURL/delete", (req, res) => {
     delete urlDatabase[req.params.shortURL]
     return res.redirect("/urls")
   }
-  return res.send("<html><body>ERROR 403</body></html>");
+  templateVars = {
+    user: users[req.session.user_id],
+    message: "ERROR 400 no url"
+  }
+  return res.render("urls_error", templateVars)
 });
 
 
@@ -63,9 +71,17 @@ app.post("/urls/:shortURL/submit", (req, res) => {
     };
     res.redirect("/urls");
   } else if (req.session.user_id && typeof usersURLS[req.session.user_id] === undefined) {
-    return res.send("<html><body>ERROR 403: invalid user urls</body></html>");
+    templateVars = {
+      user: users[req.session.user_id],
+      message: "ERROR 403 user invalid url"
+    }
+    return res.render("urls_error", templateVars)
   } else {
-    return res.send("<html><body>ERROR 403: invalid user </body></html>");
+    templateVars = {
+      user: users[req.session.user_id],
+      message: "ERROR 403 user invalid"
+    }
+    return res.render("urls_error", templateVars)
   }
 });
 
@@ -78,11 +94,19 @@ app.post("/login", (req, res) => {
         req.session.user_id = each;
         return res.redirect("/urls");
       } else {
-        return res.send("<html><body>ERROR 400: Password invalid</body></html>");
+        templateVars = {
+          user: users[req.session.user_id],
+          message: "ERROR 400 pw invalid"
+        }
+        return res.render("urls_error", templateVars)
       }
     }
   }
-  res.send("<html><body>ERROR 400: User does not exit</body></html>");
+  templateVars = {
+    user: users[req.session.user_id],
+    message: "ERROR 400 no user"
+  }
+  return res.render("urls_error", templateVars)
 });
 
 
@@ -100,11 +124,19 @@ app.post("/register", (req, res) => {
   let randomId = generateRandomString()
 
   if (req.body.email === '' || req.body.password === '') {
-    return res.send("<html><body>ERROR 400: Email or password is empty</body></html>");
+    templateVars = {
+      user: users[req.session.user_id],
+      message: "ERROR 400 empty entry"
+    }
+    return res.render("urls_error", templateVars)
   }
   for (let each in users) {
     if (req.body.email === users[each].email) {
-      return res.send("<html><body>ERROR 400: Email already exist</body></html>");
+      templateVars = {
+        user: users[req.session.user_id],
+        message: "ERROR 400 email exist"
+      }
+      return res.render("urls_error", templateVars)
     }
   }
   users[randomId] = {
@@ -189,7 +221,11 @@ app.get("/login", (req, res) => {
 
 app.get("/u/:shortURL", (req, res) => {
   if (!urlDatabase[req.params.shortURL]) {
-    return res.send("<html><body>URL doesn't exist</body></html>")
+    templateVars = {
+      user: users[req.session.user_id],
+      message: "ERROR 400 no url"
+    }
+    return res.render("urls_error", templateVars)
   }
   const longURL = urlDatabase[req.params.shortURL].longURL
   res.redirect(longURL);
@@ -199,11 +235,23 @@ app.get("/u/:shortURL", (req, res) => {
 
 app.get("/urls/:shortURL", (req, res) => {
   if (!req.session.user_id) {
-    return res.send("<html><body>ERROR 403: invalid user </body></html>");
+    templateVars = {
+      user: users[req.session.user_id],
+      message: "ERROR 403 user invalid"
+    }
+    return res.render("urls_error", templateVars)
   } else if (req.session.user_id && typeof usersURLS[req.session.user_id] === undefined) {
-    return res.send("<html><body>ERROR 403: user not authorized to view </body></html>");
+    templateVars = {
+      user: users[req.session.user_id],
+      message: "ERROR 403 no authorize view"
+    }
+    return res.render("urls_error", templateVars)
   } else if (!urlDatabase[req.params.shortURL]) {
-    return res.send("<html><body>ERROR 403: no url avaliable </body></html>");
+      templateVars = {
+        user: users[req.session.user_id],
+        message: "ERROR 400 no url"
+      }
+      return res.render("urls_error", templateVars)
   } else {
     const templateVars = { 
       shortURL: req.params.shortURL, 
